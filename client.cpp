@@ -194,10 +194,21 @@ class Client {
                !std::strncmp(msg, "(init", 5)) {
       M_clean_cycle = true;
     }
+
+    // ignore sense message
     if (!std::strncmp(msg, "(hear", 5) || !std::strncmp(msg, "(see", 4) ||
         !std::strncmp(msg, "(sense_body", 11) ||
         !std::strncmp(msg, "(fullstate", 10)) {
       return;
+    }
+
+    // parse msg from monitor
+    if (!std::strncmp(msg, "(show", 5)) {
+      int time;
+      if (std::sscanf(msg, "(show %d (", &time)) {
+        std::cout << time << std::endl;
+        return;
+      }
     }
 
     // todo : modify msg from server
